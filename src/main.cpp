@@ -23,7 +23,7 @@ LedControl lc = LedControl(DIN_PIN, CLK_PIN, CS_PIN, NUM_DEVICES);
 // --- ЗМІННІ ПІСКУ ---
 byte topGrid[8][8] = {0};
 byte botGrid[8][8] = {0};
-const int ROTATION_TOP = 0; 
+const int ROTATION_TOP = 2; 
 const int ROTATION_BOT = 2; 
 
 // --- ТАЙМЕРИ ---
@@ -88,8 +88,8 @@ void loop() {
   int16_t ax, ay, az;
   readMPU(ax, ay, az);
 
-  if (ay < -6000) orientation = 0;       
-  else if (ay > 6000) orientation = 1;   
+  if (ay < -6000) orientation = 1;       
+  else if (ay > 6000) orientation = 0;   
   else if (abs(ax) > 6000) orientation = 2; 
 
   // 2. ФІЗИКА (рух піску всередині матриць)
