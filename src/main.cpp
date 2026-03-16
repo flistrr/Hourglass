@@ -77,11 +77,11 @@ void updateOLED()
 {
   display.clearDisplay();
 
-  // Rotate display 180 degrees when hourglass is on top (orientation == 0)
+  
   if (orientation == 0)
-    display.setRotation(2);  // 180 degrees
+    display.setRotation(2);  
   else
-    display.setRotation(0);  // No rotation
+    display.setRotation(0); 
 
   int sandSource = (orientation == 0) ? countSand(topGrid) : (orientation == 1) ? countSand(botGrid)
                                                                                 : 0;
@@ -204,8 +204,6 @@ void updatePhysicsUpRight(byte grid[8][8])
 
 void updatePhysicsSideways(byte grid[8][8])
 {
-  // yPlus: positive X is down, sand falls toward positive X and downward
-  // BUT sand should spread on BOTH sides
   for (int y = 7; y >= 0; y--)
     for (int x = 7; x >= 0; x--)
     {
@@ -247,37 +245,31 @@ void updatePhysicsSideways(byte grid[8][8])
 
 void updatePhysicsSidewaysNegative(byte grid[8][8])
 {
-  // Змінюємо напрямок циклу y: тепер низ знаходиться біля y = 0
   for (int y = 0; y < 8; y++)
     for (int x = 0; x < 8; x++)
     {
       if (grid[x][y] == 1)
       {
-        // Primary: fall straight down (тепер це y - 1)
         if (y > 0 && grid[x][y - 1] == 0)
         {
           grid[x][y] = 0;
           grid[x][y - 1] = 1;
         }
-        // Secondary: diagonal down-left (gravity direction -x)
         else if (y > 0 && x > 0 && grid[x - 1][y - 1] == 0)
         {
           grid[x][y] = 0;
           grid[x - 1][y - 1] = 1;
         }
-        // Tertiary: diagonal down-right (opposite direction)
         else if (y > 0 && x < 7 && grid[x + 1][y - 1] == 0)
         {
           grid[x][y] = 0;
           grid[x + 1][y - 1] = 1;
         }
-        // Quaternary: move left (spread towards gravity)
         else if (x > 0 && grid[x - 1][y] == 0)
         {
           grid[x][y] = 0;
           grid[x - 1][y] = 1;
         }
-        // Quinary: move right (spread away from gravity)
         else if (x < 7 && grid[x + 1][y] == 0)
         {
           grid[x][y] = 0;
@@ -297,11 +289,8 @@ void attemptEqualize()
 
   if (cTop > cBot)
   {
-    // Top has more sand, move from top to bottom
     if (botGrid[0][7] == 1)
-      return;  // Destination occupied
-
-    // Find first sand particle in topGrid and remove it
+      return;  
     bool found = false;
     for (int x = 0; x < 8 && !found; x++)
     {
@@ -318,11 +307,9 @@ void attemptEqualize()
   }
   else
   {
-    // Bottom has more sand, move from bottom to top
     if (topGrid[7][0] == 1)
-      return;  // Destination occupied
+      return;  
 
-    // Find first sand particle in botGrid and remove it
     bool found = false;
     for (int x = 0; x < 8 && !found; x++)
     {
@@ -406,9 +393,9 @@ void checkOrientation(int16_t ax, int16_t ay, int16_t az)
   else if (ay > 6000)
     orientation = 0;
   else if (ax > 6000)
-    orientation = 2;  // yPlus
+    orientation = 2;  
   else if (ax < -6000)
-    orientation = 3;  // yMinus
+    orientation = 3;  
 }
 
 void handleUpdate(unsigned long currentMillis)
